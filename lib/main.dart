@@ -14,6 +14,45 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  TextEditingController pesoController =
+      TextEditingController(); //Controladores
+  TextEditingController alturaController =
+      TextEditingController(); //Controladores
+
+  String _infoText = "Informe seus dados!";
+
+  void _resetFields() {
+    //Função para limpar os campos de texto
+    pesoController.text = "";
+    alturaController.text = "";
+    setState(() { //Sempre utilizar o setState quando usar variáveis que se modificam dentro do app
+      _infoText = "Informe seus dados!";
+    });
+  }
+
+  void _calcularImc() {
+    //Função para calcular o imc
+
+    setState(() {//Informa ao compilador que houve alguma mudanca no layout
+      double peso = double.parse(pesoController.text);
+      double altura = double.parse(alturaController.text) / 100;
+      double imc = peso / (altura * altura);
+      if (imc < 18.6) {
+        _infoText = "Abaixo do peso (${imc.toStringAsPrecision(4)})";
+      } else if (imc >= 18.6 && imc < 24.9) {
+        _infoText = "Peso ideal (${imc.toStringAsPrecision(4)})";
+      } else if (imc >= 24.9 && imc < 29.9) {
+        _infoText = "Levemente Acima do Peso (${imc.toStringAsPrecision(4)})";
+      } else if (imc >= 29.9 && imc < 34.9) {
+        _infoText = "Obesidade Grau 1 (${imc.toStringAsPrecision(4)})";
+      } else if (imc >= 34.9 && imc < 39.9) {
+        _infoText = "Obesidade Grau 2 (${imc.toStringAsPrecision(4)})";
+      } else if (imc > 40) {
+        _infoText = "Obesidade Grau 3(${imc.toStringAsPrecision(4)})";
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,15 +66,18 @@ class _HomeState extends State<Home> {
           IconButton(
             icon: Icon(Icons.refresh), //Atribuindo o tipo de botão
             onPressed:
-                () {}, //funcão que vai ser chamada quando o botão for pressionado
+                _resetFields, //funcão que vai ser chamada quando o botão for pressionado
           )
         ],
       ),
       backgroundColor: Colors.white, //Cor de fundo do App
 
-      body: SingleChildScrollView( //Adicionando um Scroll
-        padding:EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0) , //Recuo sobre as laterais de toda a ScrowView
-        child: Column( //Filho da ScrollView
+      body: SingleChildScrollView(
+        //Adicionando um Scroll
+        padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+        //Recuo sobre as laterais de toda a ScrowView
+        child: Column(
+          //Filho da ScrollView
           //Widget usado para agrupar outros widgets na vertical
           crossAxisAlignment: CrossAxisAlignment.stretch,
           //Alinhamento utilizado para que os componentes utilizaem toda a largura da tela
@@ -55,11 +97,12 @@ class _HomeState extends State<Home> {
                   color: Colors.indigoAccent,
                 ),
               ),
-              textAlign: TextAlign.center, //Alinhamento do texto central
-              style: TextStyle(
-                  color: Colors.indigoAccent,
-                  fontSize:
-                  25.0), //Cor e tamanho da fonte que será digitado na caixa de texto
+              textAlign: TextAlign.center,
+              //Alinhamento do texto central
+              style: TextStyle(color: Colors.indigoAccent, fontSize: 25.0),
+              //Cor e tamanho da fonte que será digitado na caixa de texto
+              controller:
+                  pesoController, //Definindo os controladores que serão responsáveis capturar os valores
             ),
 
             TextField(
@@ -73,19 +116,22 @@ class _HomeState extends State<Home> {
                   color: Colors.indigoAccent,
                 ),
               ),
-              textAlign: TextAlign.center, //Alinhamento do texto central
-              style: TextStyle(
-                  color: Colors.indigoAccent,
-                  fontSize:
-                  25.0), //Cor e tamanho da fonte que será digitado na caixa de texto
+              textAlign: TextAlign.center,
+              //Alinhamento do texto central
+              style: TextStyle(color: Colors.indigoAccent, fontSize: 25.0),
+              //Cor e tamanho da fonte que será digitado na caixa de texto
+              controller:
+                  alturaController, //Definindo os controladores que serão responsáveis capturar os valores
             ),
-            Padding(//Alinhamento do botão
-              padding: EdgeInsets.only(top: 10.0, bottom: 10.0), //Tipo de alinhamento onde passamos os parametros
+            Padding(
+              //Alinhamento do botão
+              padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+              //Tipo de alinhamento onde passamos os parametros
               child: Container(
                 //Container que vai receber o RaisedButton
                 height: 50.0, //Tamanho do container
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: _calcularImc,
                   //Função que será chamada quando botão for clicado
                   child: Text(
                     //filho do RaisedButton
@@ -96,12 +142,15 @@ class _HomeState extends State<Home> {
                   ),
                   color: Colors.indigoAccent, //Cor do Texto do Botão
                 ),
-              ) ,
+              ),
             ),
-            Text( //Texto que será exibido como resultado
-              "Info",
+            Text(
+              //Texto que será exibido como resultado
+              _infoText,
               textAlign: TextAlign.center, //Alinhamento do texto
-              style: TextStyle(color: Colors.indigoAccent, fontSize: 25.0), //Cor e tamanho do texto
+              style: TextStyle(
+                  color: Colors.indigoAccent,
+                  fontSize: 25.0), //Cor e tamanho do texto
             )
           ],
         ),
