@@ -19,21 +19,30 @@ class _HomeState extends State<Home> {
   TextEditingController alturaController =
       TextEditingController(); //Controladores
 
+  GlobalKey<FormState> _formKey =
+      GlobalKey<FormState>(); //instanciando uma chave global
+
   String _infoText = "Informe seus dados!";
+  String _infoText1 = "Insira seu Peso!";
+  String _infoText2 = "Insira sua Altura!";
+
 
   void _resetFields() {
     //Função para limpar os campos de texto
     pesoController.text = "";
     alturaController.text = "";
-    setState(() { //Sempre utilizar o setState quando usar variáveis que se modificam dentro do app
+    setState(() {
+      //Sempre utilizar o setState quando usar variáveis que se modificam dentro do app
       _infoText = "Informe seus dados!";
+      _formKey = GlobalKey<FormState>();
     });
   }
 
   void _calcularImc() {
     //Função para calcular o imc
 
-    setState(() {//Informa ao compilador que houve alguma mudanca no layout
+    setState(() {
+      //Informa ao compilador que houve alguma mudanca no layout
       double peso = double.parse(pesoController.text);
       double altura = double.parse(alturaController.text) / 100;
       double imc = peso / (altura * altura);
@@ -76,7 +85,9 @@ class _HomeState extends State<Home> {
         //Adicionando um Scroll
         padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
         //Recuo sobre as laterais de toda a ScrowView
-        child: Column(
+        child: Form(
+            key: _formKey,
+            child: Column(
           //Filho da ScrollView
           //Widget usado para agrupar outros widgets na vertical
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -86,7 +97,7 @@ class _HomeState extends State<Home> {
             Icon(Icons.person_outline, size: 120.0, color: Colors.indigoAccent),
             //Ícone já incluso no sistema
 
-            TextField(
+            TextFormField( //O TextFormField possui uma função chamada validator
               keyboardType: TextInputType.number,
               //Cria um campo de texto que só aceitará numeros
               decoration: InputDecoration(
@@ -102,10 +113,15 @@ class _HomeState extends State<Home> {
               style: TextStyle(color: Colors.indigoAccent, fontSize: 25.0),
               //Cor e tamanho da fonte que será digitado na caixa de texto
               controller:
-                  pesoController, //Definindo os controladores que serão responsáveis capturar os valores
+              pesoController, //Definindo os controladores que serão responsáveis capturar os valores
+              validator: (value){ //sempre que digitar algo nos campos e for validar ele vai chamar esta função anonima passando o valor que foi digitado no layout
+                if(value.isEmpty){
+                  return _infoText1;
+                }
+              },
             ),
 
-            TextField(
+            TextFormField( //O TextFormField possui uma função chamada validator
               keyboardType: TextInputType.number,
               //Cria um campo de texto que só aceitará numeros
               decoration: InputDecoration(
@@ -121,7 +137,12 @@ class _HomeState extends State<Home> {
               style: TextStyle(color: Colors.indigoAccent, fontSize: 25.0),
               //Cor e tamanho da fonte que será digitado na caixa de texto
               controller:
-                  alturaController, //Definindo os controladores que serão responsáveis capturar os valores
+              alturaController, //Definindo os controladores que serão responsáveis capturar os valores
+                validator: (value){ //sempre que digitar algo nos campos e for validar ele vai chamar esta função anonima passando o valor que foi digitado no layout
+                  if(value.isEmpty){
+                    return _infoText2;
+                  }
+                }
             ),
             Padding(
               //Alinhamento do botão
@@ -131,7 +152,11 @@ class _HomeState extends State<Home> {
                 //Container que vai receber o RaisedButton
                 height: 50.0, //Tamanho do container
                 child: RaisedButton(
-                  onPressed: _calcularImc,
+                  onPressed: (){
+                    if(_formKey.currentState.validate()){
+                      _calcularImc();
+                    }
+                  },
                   //Função que será chamada quando botão for clicado
                   child: Text(
                     //filho do RaisedButton
@@ -153,7 +178,7 @@ class _HomeState extends State<Home> {
                   fontSize: 25.0), //Cor e tamanho do texto
             )
           ],
-        ),
+        )),
       ),
     );
   }
