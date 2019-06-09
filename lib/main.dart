@@ -33,51 +33,78 @@ class _HomeState extends State<Home> {
       ),
       backgroundColor: Colors.white, //Cor de fundo do App
 
-      body: Column(
-        //Widget usado para agrupar outros widgets na vertical
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        //Alinhamento utilizado para que os componentes utilizaem toda a largura da tela
+      body: SingleChildScrollView( //Adicionando um Scroll
+        padding:EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0) , //Recuo sobre as laterais de toda a ScrowView
+        child: Column( //Filho da ScrollView
+          //Widget usado para agrupar outros widgets na vertical
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          //Alinhamento utilizado para que os componentes utilizaem toda a largura da tela
 
-        children: <Widget>[
-          Icon(Icons.person_outline, size: 120.0, color: Colors.indigoAccent),
-          //Ícone já incluso no sistema
+          children: <Widget>[
+            Icon(Icons.person_outline, size: 120.0, color: Colors.indigoAccent),
+            //Ícone já incluso no sistema
 
-          TextField(
-            keyboardType: TextInputType.number,
-            //Cria um campo de texto que só aceitará numeros
-            decoration: InputDecoration(
-              //Usado para formatar o que aparecerá no campo de texto
-              labelText: "Peso (Kg)",
-              //Texto que aparecerá na tela acima do campo de texto
-              labelStyle: TextStyle(
-                color: Colors.indigoAccent,
+            TextField(
+              keyboardType: TextInputType.number,
+              //Cria um campo de texto que só aceitará numeros
+              decoration: InputDecoration(
+                //Usado para formatar o que aparecerá no campo de texto
+                labelText: "Peso (Kg)",
+                //Texto que aparecerá na tela acima do campo de texto
+                labelStyle: TextStyle(
+                  color: Colors.indigoAccent,
+                ),
               ),
+              textAlign: TextAlign.center, //Alinhamento do texto central
+              style: TextStyle(
+                  color: Colors.indigoAccent,
+                  fontSize:
+                  25.0), //Cor e tamanho da fonte que será digitado na caixa de texto
             ),
-            textAlign: TextAlign.center, //Alinhamento do texto central
-            style: TextStyle(
-                color: Colors.indigoAccent,
-                fontSize:
-                    25.0), //Cor e tamanho da fonte que será digitado na caixa de texto
-          ),
 
-          TextField(
-            keyboardType: TextInputType.number,
-            //Cria um campo de texto que só aceitará numeros
-            decoration: InputDecoration(
-              //Usado para formatar o que aparecerá no campo de texto
-              labelText: "Altura (cm)",
-              //Texto que aparecerá na tela acima do campo de texto
-              labelStyle: TextStyle(
-                color: Colors.indigoAccent,
+            TextField(
+              keyboardType: TextInputType.number,
+              //Cria um campo de texto que só aceitará numeros
+              decoration: InputDecoration(
+                //Usado para formatar o que aparecerá no campo de texto
+                labelText: "Altura (cm)",
+                //Texto que aparecerá na tela acima do campo de texto
+                labelStyle: TextStyle(
+                  color: Colors.indigoAccent,
+                ),
               ),
+              textAlign: TextAlign.center, //Alinhamento do texto central
+              style: TextStyle(
+                  color: Colors.indigoAccent,
+                  fontSize:
+                  25.0), //Cor e tamanho da fonte que será digitado na caixa de texto
             ),
-            textAlign: TextAlign.center, //Alinhamento do texto central
-            style: TextStyle(
-                color: Colors.indigoAccent,
-                fontSize:
-                    25.0), //Cor e tamanho da fonte que será digitado na caixa de texto
-          )
-        ],
+            Padding(//Alinhamento do botão
+              padding: EdgeInsets.only(top: 10.0, bottom: 10.0), //Tipo de alinhamento onde passamos os parametros
+              child: Container(
+                //Container que vai receber o RaisedButton
+                height: 50.0, //Tamanho do container
+                child: RaisedButton(
+                  onPressed: () {},
+                  //Função que será chamada quando botão for clicado
+                  child: Text(
+                    //filho do RaisedButton
+                    "Calcular", //Texto que será exibido no botão
+                    style: TextStyle(
+                        color: Colors.white, //Cor do texto do Botão
+                        fontSize: 25.0), //Tamanho da fonte do texto do botão
+                  ),
+                  color: Colors.indigoAccent, //Cor do Texto do Botão
+                ),
+              ) ,
+            ),
+            Text( //Texto que será exibido como resultado
+              "Info",
+              textAlign: TextAlign.center, //Alinhamento do texto
+              style: TextStyle(color: Colors.indigoAccent, fontSize: 25.0), //Cor e tamanho do texto
+            )
+          ],
+        ),
       ),
     );
   }
